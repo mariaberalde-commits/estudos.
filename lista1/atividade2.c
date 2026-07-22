@@ -13,11 +13,14 @@ int main(void) {
     printf("Nome do primeiro time: ");
     if (scanf("%49[^]", jogo.time1) != 1) return 1;
     getchar();
+
     printf("Nome do segundo time: ");
     if (scanf("%49[^]", jogo.time2) != 1) return 1;
     getchar();
+
     printf("Gols do %s: ", jogo.time1);
     if (scanf("%d", &jogo.gols1) != 1) return 1;
+    
     printf("Gols do %s: ", jogo.time2);
     if (scanf("%d", &jogo.gols2) != 1) return 1;
 

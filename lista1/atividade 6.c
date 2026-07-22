@@ -1,28 +1,35 @@
 #include <stdio.h>
-#include <string.h>
 
-typedef struct {
+struct Jogador {
     char nome[100];
     int pontos;
-} Jogador;
+};
 
-int main(void) {
-    int N;
-    if (scanf("%d", &N) != 1) return 0;
-    if (N <= 0) return 0;
+int main() {
+    int n;
+    printf("Quantidade de jogadores: ");
+    scanf("%d", &n);
 
-    Jogador maior, menor, cur;
-    // read first player
-    if (scanf("%99s %d", maior.nome, &maior.pontos) != 2) return 0;
-    menor = maior;
+    struct Jogador jogadores[100];
 
-    for (int i = 1; i < N; ++i) {
-        if (scanf("%99s %d", cur.nome, &cur.pontos) != 2) break;
-        if (cur.pontos > maior.pontos) maior = cur;
-        if (cur.pontos < menor.pontos) menor = cur;
+    for (int i = 0; i < n; i++) {
+        printf("\nJogador %d\n", i + 1);
+        printf("Nome  : ");
+        scanf(" %[^\n]", jogadores[i].nome);
+        printf("Pontos: ");
+        scanf("%d", &jogadores[i].pontos);
     }
 
-    printf("Jogador com mais pontos: %s %d\n", maior.nome, maior.pontos);
-    printf("Jogador com menos pontos: %s %d\n", menor.nome, menor.pontos);
+    int idxMaior = 0, idxMenor = 0;
+    for (int i = 1; i < n; i++) {
+        if (jogadores[i].pontos > jogadores[idxMaior].pontos) idxMaior = i;
+        if (jogadores[i].pontos < jogadores[idxMenor].pontos) idxMenor = i;
+    }
+
+    printf("\nJogador com mais pontos  : %s (%d pts)\n",
+           jogadores[idxMaior].nome, jogadores[idxMaior].pontos);
+    printf("Jogador com menos pontos : %s (%d pts)\n",
+           jogadores[idxMenor].nome, jogadores[idxMenor].pontos);
+
     return 0;
 }

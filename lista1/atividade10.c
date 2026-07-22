@@ -1,57 +1,60 @@
 #include <stdio.h>
-#include <string.h>
 
-#define MAX_NOME 100
-
-typedef struct {
-    char nome[MAX_NOME];
+struct Aluno {
+    char nome[100];
     float n1, n2, n3;
     float media;
-} Aluno;
+};
 
-void calcularMedia(Aluno *a) {
-    a->media = (a->n1 + a->n2 + a->n3) / 3.0f;
+float calcularMedia(float n1, float n2, float n3) {
+    return (n1 + n2 + n3) / 3.0;
 }
 
-void ordenarPorNota(Aluno turma[], int n) {
-    // seleção: do maior para o menor (decrescente) pela média
-    for (int i = 0; i < n - 1; ++i) {
-        int idxMax = i;
-        for (int j = i + 1; j < n; ++j) {
-            if (turma[j].media > turma[idxMax].media) idxMax = j;
+/* Ordenacao por selecao — maior media primeiro */
+void ordenarPorMedia(struct Aluno turma[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int idxMaior = i;
+        for (int j = i + 1; j < n; j++) {
+            if (turma[j].media > turma[idxMaior].media)
+                idxMaior = j;
         }
-        if (idxMax != i) {
-            Aluno tmp = turma[i];
-            turma[i] = turma[idxMax];
-            turma[idxMax] = tmp;
+        if (idxMaior != i) {
+            struct Aluno tmp  = turma[i];
+            turma[i]          = turma[idxMaior];
+            turma[idxMaior]   = tmp;
         }
     }
 }
 
-int main(void) {
+int main() {
     int n;
-    if (printf("Quantidade de alunos: ") < 0) return 0;
-    if (scanf("%d", &n) != 1 || n <= 0) return 0;
-    getchar(); // consumir newline
+    printf("Quantidade de alunos: ");
+    scanf("%d", &n);
 
-    Aluno turma[n];
-    for (int i = 0; i < n; ++i) {
-        printf("Aluno %d nome: ", i+1);
-        if (!fgets(turma[i].nome, MAX_NOME, stdin)) return 0;
-        // remover newline
-        turma[i].nome[strcspn(turma[i].nome, "\n")] = '\0';
-        printf("Notas (3) separadas por espaço: ");
-        if (scanf("%f %f %f", &turma[i].n1, &turma[i].n2, &turma[i].n3) != 3) return 0;
-        getchar();
-        calcularMedia(&turma[i]);
+    struct Aluno turma[100];
+
+    for (int i = 0; i < n; i++) {
+        printf("\nAluno %d\n", i + 1);
+        printf("Nome  : ");
+        scanf(" %[^\n]", turma[i].nome);
+        printf("Nota 1: ");
+        scanf("%f", &turma[i].n1);
+        printf("Nota 2: ");
+        scanf("%f", &turma[i].n2);
+        printf("Nota 3: ");
+        scanf("%f", &turma[i].n3);
+        turma[i].media = calcularMedia(turma[i].n1, turma[i].n2, turma[i].n3);
     }
 
-    ordenarPorNota(turma, n);
+    ordenarPorMedia(turma, n);
 
     printf("\nBoletim - ordem de ranking:\n");
-    for (int i = 0; i < n; ++i) {
-        printf("%2d. %s - Notas: %.2f, %.2f, %.2f - Media: %.2f\n",
-               i+1, turma[i].nome, turma[i].n1, turma[i].n2, turma[i].n3, turma[i].media);
+    printf("%-4s %-30s %6s %6s %6s %8s\n", "#", "Nome", "N1", "N2", "N3", "Media");
+    printf("------------------------------------------------------------\n");
+    for (int i = 0; i < n; i++) {
+        printf("%-4d %-30s %6.2f %6.2f %6.2f %8.2f\n",
+               i + 1, turma[i].nome,
+               turma[i].n1, turma[i].n2, turma[i].n3, turma[i].media);
     }
 
     return 0;
